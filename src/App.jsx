@@ -1,134 +1,140 @@
-import React, { useState } from 'react'
+import React, { useState } from "react";
+import { questions } from "./questions";
 
 export default function App() {
-  const questions = [
-    {
-      questionText: 'What is the capital of France?',
-      answerOptions: [
-        { answerText: 'Berlin', isCorrect: false },
-        { answerText: 'Madrid', isCorrect: false },
-        { answerText: 'Paris', isCorrect: true },
-        { answerText: 'Rome', isCorrect: false },
-      ]
-    },
-    {
-      questionText: 'What is the largest planet in our solar system?',
-      answerOptions: [
-        { answerText: 'Earth', isCorrect: false },
-        { answerText: 'Jupiter', isCorrect: true },
-        { answerText: 'Mars', isCorrect: false },
-        { answerText: 'Saturn', isCorrect: false },
-      ]
-    },
-    {
-      questionText: 'What is the chemical symbol for gold?',
-      answerOptions: [
-        { answerText: 'Au', isCorrect: true },
-        { answerText: 'Ag', isCorrect: false },
-        { answerText: 'Fe', isCorrect: false },
-        { answerText: 'Pb', isCorrect: false },
-      ]
-    },
-    {
-      questionText: 'Who wrote "Romeo and Juliet"?',
-      answerOptions: [
-        { answerText: 'Charles Dickens', isCorrect: false },
-        { answerText: 'William Shakespeare', isCorrect: true },
-        { answerText: 'Mark Twain', isCorrect: false },
-        { answerText: 'Jane Austen', isCorrect: false },
-      ]
-    },
-    {
-      questionText: 'What is the speed of light?',
-      answerOptions: [
-        { answerText: '299,792 km/s', isCorrect: true },
-        { answerText: '150,000 km/s', isCorrect: false },
-        { answerText: '300,000 km/s', isCorrect: false },
-        { answerText: '1,080 million km/h', isCorrect: false },
-      ]
-    },
-    {
-      questionText: 'Who is the CEO of Tesla?',
-      answerOptions: [
-        { answerText: 'Jeff Bezos', isCorrect: false },
-        { answerText: 'Elon Musk', isCorrect: true },
-        { answerText: 'Bill Gates', isCorrect: false },
-        { answerText: 'Larry Page', isCorrect: false },
-      ]
-    }
-  ];
-
   const [currentQuestion, setCurrentQuestion] = useState(0);
-
-  const [showScore, setshowScore] = useState(false);
+  const [showScore, setShowScore] = useState(false);
   const [score, setScore] = useState(0);
   const [isQuizEnded, setIsQuizEnded] = useState(false);
   const [showCorrections, setShowCorrections] = useState(false);
 
+  const totalQuestions = questions.length;
+  const progressPercent = ((currentQuestion + 1) / totalQuestions) * 100;
 
   const handleAnswerButtonClick = (isCorrect) => {
-    if (isCorrect === true) {
-      setScore(score + 1);
-    };
+    if (isCorrect) {
+      setScore((prev) => prev + 1);
+    }
+
     const nextQuestion = currentQuestion + 1;
-    if (nextQuestion < questions.length) {
+    if (nextQuestion < totalQuestions) {
       setCurrentQuestion(nextQuestion);
     } else {
-      setshowScore(true);
+      setShowScore(true);
     }
-  }
+  };
 
   const restartQuiz = () => {
     setCurrentQuestion(0);
-    setshowScore(false);
+    setShowScore(false);
     setScore(0);
+    setIsQuizEnded(false);
+    setShowCorrections(false);
+  };
+
+  if (showCorrections) {
+    return (
+        <div className="app">
+          <div className="corrections-screen">
+            <h2>Corrections</h2>
+            <ul>
+              {questions.map((question) => (
+                  <li key={question.id}>
+                    <p>{question.questionText}</p>
+                    <p>
+                      Correct Answer:{" "}
+                      {question.answerOptions.find((option) => option.isCorrect)
+                          .answerText}
+                    </p>
+                  </li>
+              ))}
+            </ul>
+            <button
+                onClick={() => setShowCorrections(false)}
+                className="btn btn-outline back"
+            >
+              Back to Quiz
+            </button>
+          </div>
+        </div>
+    );
   }
 
-  return (
-    <div className="app">
-      {showCorrections ? (
-        <div className='corrections-screen'>
-          <h2>Corrections</h2>
-          <ul>
-            {questions.map((question, index) => (
-              <li key={index}>
-                <p>{question.questionText}</p>
-                <p>Correct Answer: {question.answerOptions.find(option => option.isCorrect).answerText}</p>
-              </li>
-            ))}
-          </ul>
-          <button onClick={() => setShowCorrections(false)} className='back'>Back to Quiz</button>
+  if (showScore && isQuizEnded) {
+    return (
+        <div className="app">
+          <div className="end-screen">
+            <img
+                src="https://media.giphy.com/media/3o7aD2sa1v6x4q5Y8I/giphy.gif"
+                alt="end-screen"
+                className="end-logo"
+            />
+            <h1>Quiz Ended! Thanks for taking the quiz.</h1>
+            <button onClick={restartQuiz} className="btn btn-primary">
+              Restart Quiz
+            </button>
+          </div>
         </div>
-      ) : showScore ? (
-        isQuizEnded ? (
-          <div className='end-screen'>
-            <img src="https://media.giphy.com/media/3o7aD2sa1v6x4q5Y8I/giphy.gif" alt="end-screen" className='end-logo' />
-            <h1>Quiz Ended!, Thanks for taking the Quiz!</h1>
-          </div>
-        ) : (
+    );
+  }
+
+  if (showScore) {
+    return (
+        <div className="app">
           <div className="score-section">
-            You scored {score} out of {questions.length}
-            <div className='next-step'>
-              <button onClick={restartQuiz} className='restart'>Restart</button>
-              <button onClick={() => setShowCorrections(true)} className='corrections'>See Corrections</button>
-              <button onClick={() => setIsQuizEnded(true)} className='end'>End Quiz</button>
+            <div>
+              You scored <strong>{score}</strong> out of {totalQuestions}
             </div>
-          </div>)
-      ) : (
-        <>
-          <div className='question-section'>
-            <div className='question-count'>
-              <span>Question {currentQuestion + 1}</span>/{questions.length}
+            <div className="next-step">
+              <button onClick={restartQuiz} className="btn btn-outline">
+                Restart
+              </button>
+              <button
+                  onClick={() => setShowCorrections(true)}
+                  className="btn btn-primary"
+              >
+                See Corrections
+              </button>
+              <button
+                  onClick={() => setIsQuizEnded(true)}
+                  className="btn btn-danger"
+              >
+                End Quiz
+              </button>
             </div>
-            <div className='question-text'>{questions[currentQuestion].questionText}</div>
           </div>
-          <div className='answer-section'>
-            {questions[currentQuestion].answerOptions.map((answerOption) => (
-              <button onClick={() => handleAnswerButtonClick(answerOption.isCorrect)}>{answerOption.answerText}</button>
-            ))}
+        </div>
+    );
+  }
+
+  const current = questions[currentQuestion];
+
+  return (
+      <div className="app">
+        <div className="question-section">
+          <div className="question-count">
+            <span>Question {currentQuestion + 1}</span>/{totalQuestions}
           </div>
-        </>
-      )}
-    </div>
+          <div className="progress-track">
+            <div
+                className="progress-bar"
+                style={{ width: `${progressPercent}%` }}
+            />
+          </div>
+          <div className="question-text">{current.questionText}</div>
+        </div>
+
+        <div className="answer-section">
+          {current.answerOptions.map((answerOption, index) => (
+              <button
+                  key={index}
+                  className="answer-button"
+                  onClick={() => handleAnswerButtonClick(answerOption.isCorrect)}
+              >
+                {answerOption.answerText}
+              </button>
+          ))}
+        </div>
+      </div>
   );
 }
