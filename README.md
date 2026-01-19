@@ -2,19 +2,19 @@
 
 An interactive multiple-choice quiz application built using React. This app tests users with various general knowledge questions, tracks their scores, displays corrections, and allows them to restart or end the quiz.
 
-## 🖥️ Demo 
+## Demo 
 
 🔗 **Live Demo:** https://quiz-app-sigma-one-67.vercel.app/
 
-## 🚀 Features
+## Features
 
-- 📚 Multiple-choice questions
-- ✅ Real-time scoring
-- 🔁 Restart quiz anytime
-- 📖 See corrections after completing the quiz
-- 🎉 Animated end screen to conclude the quiz
-
-## 🧠 Sample Questions
+- Multiple-choice questions
+- Real-time scoring
+- Restart quiz anytime
+- See corrections after completing the quiz
+- Animated end screen to conclude the quiz
+ 
+## Sample Questions
 
 1. What is the capital of France?
 2. What is the largest planet in our solar system?
@@ -22,7 +22,7 @@ An interactive multiple-choice quiz application built using React. This app test
 4. Who wrote “Romeo and Juliet”?
 5. What is the approximate speed of light in vacuum?
 
-## 💻 Tech Stack
+## Tech Stack
 - HTML5 (for base structure when needed)
 - CSS3 (custom styling, no UI libraries)​
 - React (functional components + hooks)​
