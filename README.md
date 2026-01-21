@@ -47,4 +47,4 @@ An interactive multiple-choice quiz application built using React. This app test
    npm install
 3. Start the development server
    ```bash
-   npm start
+   npm run dev
